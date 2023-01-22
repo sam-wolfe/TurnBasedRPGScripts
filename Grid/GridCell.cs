@@ -12,4 +12,7 @@ public class GridCell {
         _gridSystem = gridSystem;
     }
 
+    public string GetPositionString() {
+        return $"({_gridPosition.x},{_gridPosition.z})";
+    }
 }
