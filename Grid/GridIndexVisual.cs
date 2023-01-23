@@ -21,7 +21,7 @@ public class GridIndexVisual : MonoBehaviour {
     }
 
     private void Update() {
-        
+        _text.text = _gridCell.GetPositionString();
     }
 
 }

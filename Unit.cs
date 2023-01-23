@@ -1,4 +1,5 @@
 using System;
+using Grid;
 using UnityEngine;
 
 public class Unit : MonoBehaviour {
@@ -7,6 +8,7 @@ public class Unit : MonoBehaviour {
     
     private Vector3 targetPosition;
     private float stoppingDistance;
+    private GridPosition _gridPosition;
     
     
     // --------------------------------------------------------------------
@@ -34,7 +36,8 @@ public class Unit : MonoBehaviour {
     }
 
     void Start() {
-        
+        _gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
+        LevelGrid.instance.SetUnitAtGridPosition(_gridPosition, this);
     }
 
     void Update() {
@@ -52,7 +55,12 @@ public class Unit : MonoBehaviour {
         else {
             unitAnimator.SetBool("IsWalking", false);
         }
-
+        
+        GridPosition newGridPosition = LevelGrid.instance.GetGridPosition(transform.position);
+        if (newGridPosition != _gridPosition) {
+            LevelGrid.instance.UnitMovedGridPosition(this, _gridPosition, newGridPosition);
+            _gridPosition = newGridPosition;
+        }
     }
     
     

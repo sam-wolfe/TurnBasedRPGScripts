@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Grid;
 using UnityEngine;
 
 public class GridSystem {
@@ -47,9 +48,9 @@ public class GridSystem {
                         GetWorldPosition(gridPosition),
                         Quaternion.identity
                     );
-                GridIndexVisual thing = 
+                GridIndexVisual gVis = 
                     debugGridIndex.GetComponent<GridIndexVisual>();
-                thing.SetGridCell(GetGridCell(gridPosition));
+                gVis.SetGridCell(GetGridCell(gridPosition));
             }
         }
     }
