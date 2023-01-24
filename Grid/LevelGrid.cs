@@ -26,24 +26,24 @@ public class LevelGrid : MonoBehaviour {
     private void Start() {
     }
 
-    public void SetUnitAtGridPosition(GridPosition gridPosition, Unit unit) {
+    public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit) {
         GridCell cell = _gridSystem.GetGridCell(gridPosition);
-        cell.SetUnit(unit);
+        cell.AddUnit(unit);
     }
 
-    public Unit GetUnitAtGridPosition(GridPosition gridPosition) {
+    public List<Unit> GetUnitsAtGridPosition(GridPosition gridPosition) {
         GridCell cell = _gridSystem.GetGridCell(gridPosition);
-        return cell.unit;
+        return cell._unitList;
     }
 
-    public void ClearUnitAtGridPosition(GridPosition gridPosition) {
+    public void RemoveUnitAtGridPosition(GridPosition gridPosition, Unit unit) {
         GridCell cell = _gridSystem.GetGridCell(gridPosition);
-        cell.ClearUnit();
+        cell.RemoveUnit(unit);
     }
 
     public void UnitMovedGridPosition(Unit unit, GridPosition from, GridPosition to) {
-        ClearUnitAtGridPosition(from);
-        SetUnitAtGridPosition(to, unit);
+        RemoveUnitAtGridPosition(from, unit);
+        AddUnitAtGridPosition(to, unit);
     }
 
     public GridPosition GetGridPosition(Vector3 worldPosition) => _gridSystem.GetGridPosition(worldPosition);

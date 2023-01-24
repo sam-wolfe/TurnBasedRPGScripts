@@ -39,6 +39,7 @@ public class GridSystem {
     }
 
     public void CreateDebugObjects(Transform debugPrefab) {
+        GameObject gridParent = GameObject.FindWithTag("GridParent");
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < height; z++) {
                 GridPosition gridPosition = new GridPosition(x, z);
@@ -48,6 +49,7 @@ public class GridSystem {
                         GetWorldPosition(gridPosition),
                         Quaternion.identity
                     );
+                debugGridIndex.parent = gridParent.transform;
                 GridIndexVisual gVis = 
                     debugGridIndex.GetComponent<GridIndexVisual>();
                 gVis.SetGridCell(GetGridCell(gridPosition));

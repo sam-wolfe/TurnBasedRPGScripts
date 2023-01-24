@@ -7,8 +7,7 @@ public class GridCell {
 
     private GridSystem _gridSystem;
     private GridPosition _gridPosition;
-    public Unit unit { get; private set; }
-    private List<Unit> _unitList;
+    public List<Unit> _unitList { get; private set; }
 
 
     public GridCell(GridSystem gridSystem, GridPosition gridPosition) {
@@ -18,7 +17,10 @@ public class GridCell {
     }
 
     public string GetPositionString() {
-        string unitString = unit == null ? "" : $"\n{unit}";
+        string unitString = "";
+        foreach (var u in _unitList) {
+            unitString = $"{unitString}\n{u}";
+        }
         
         return $"{this}{unitString}";
     }
@@ -39,12 +41,12 @@ public class GridCell {
         return _unitList;
     }
     
-    public bool ClearUnit() {
-        if (unit == null) {
+    public bool ClearUnits() {
+        if (_unitList.Count == 0) {
             return false;
         }
         else {
-            unit = null;
+            _unitList.Clear();
             return true;
         }
     }
