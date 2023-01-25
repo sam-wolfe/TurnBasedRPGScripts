@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Grid;
 using UnityEngine;
 
@@ -49,5 +50,9 @@ public class GridCell {
             _unitList.Clear();
             return true;
         }
+    }
+
+    public bool HasAnyUnit() {
+        return _unitList.Any();
     }
 }

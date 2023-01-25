@@ -7,6 +7,7 @@ public class TestGrid : MonoBehaviour {
 
     // [SerializeField] private Transform _gridDebugObjectPrefab;
     // private GridSystem _gridSystem;
+    [SerializeField] private Unit unit;
     
     void Start() {
         // _gridSystem = new GridSystem(10, 10, 2f);
@@ -17,6 +18,9 @@ public class TestGrid : MonoBehaviour {
 
     private void Update() {
         // Debug.Log(_gridSystem.GetGridPosition(MouseWorld.GetPosition()));
+        if (Input.GetKeyDown(KeyCode.T)) {
+            unit.GetMoveAction().GetValidActionGridPositions();
+        }
     }
 
 }
