@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GridSystem {
 
-    private int width;
-    private int height;
+    public int width {  get; private set; }
+    public int height {  get; private set; }
     private float cellSize;
     private GridCell[,] gridCellArray;
     

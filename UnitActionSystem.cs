@@ -51,7 +51,10 @@ public class UnitActionSystem : MonoBehaviour {
                 }
             }
             
-            
+        }
+
+        if (Input.GetKeyDown(KeyCode.R)) {
+            selectedUnit.GetSpinAction().Spin();
         }
     }
 
@@ -66,5 +69,8 @@ public class UnitActionSystem : MonoBehaviour {
         // OnSelectedUnitChanged?.Invoke(selectedUnit);
         // selectedUnit = unit;
     }
+
+    public Unit GetSelectedUnit => selectedUnit;
+
     
 }
