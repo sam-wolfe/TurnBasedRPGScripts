@@ -5,9 +5,6 @@ using UnityEngine;
 public class SpinAction : MonoBehaviour {
 
     private bool startSpinning;
-    void Start() {
-        
-    }
 
     void Update() {
         if (startSpinning) {
@@ -18,6 +15,5 @@ public class SpinAction : MonoBehaviour {
 
     public void Spin() {
         startSpinning = true;
-        Debug.Log("spin");
     }
 }
