@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using Grid;
 using UnityEngine;
 
-public class MoveAction : MonoBehaviour
+public class MoveAction : BaseAction
 {
     [SerializeField] private Animator unitAnimator;
     private float stoppingDistance = 0.1f;
     private Vector3 targetPosition;
-    private Unit _unit;
-    private bool _isActive;
     
     // For dev
     [SerializeField] private int maxMoveDistance = 4;
     
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
         targetPosition = transform.position;
-        _unit = GetComponent<Unit>();
     }
 
     void Update()

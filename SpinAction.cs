@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpinAction : MonoBehaviour {
+public class SpinAction : BaseAction {
 
-    private bool startSpinning;
     [SerializeField] private float spinAmount = 360;
     private Vector3 originalRotation;
     private float totalSpin;
 
     void Update() {
-        if (startSpinning) {
+        if (_isActive) {
             totalSpin += ProcessSpin();
             if (totalSpin >= spinAmount) {
                 // we are done spinning
@@ -26,13 +25,13 @@ public class SpinAction : MonoBehaviour {
     }
     
     private void EndSpin() {
-        startSpinning = false;
+        _isActive = false;
         transform.eulerAngles = originalRotation;
         totalSpin = 0;
     }
 
     public void Spin() {
-        startSpinning = true;
+        _isActive = true;
         originalRotation = transform.eulerAngles;
     }
 }
