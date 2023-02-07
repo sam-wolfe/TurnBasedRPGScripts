@@ -16,6 +16,8 @@ public class UnitActionSystem : MonoBehaviour {
     [SerializeField] 
     private LayerMask unitLayerMask;
 
+    private bool _isBusy;
+
     private void Awake() {
         if (instance != null) {
             Debug.LogError("You added an extra unit action system ya dingus: " + transform + " - " + instance);
@@ -26,18 +28,40 @@ public class UnitActionSystem : MonoBehaviour {
     }
 
     void Update() {
+        if (_isBusy) {
+            // TODO early return is from lessons. Refactor if reused in
+            //  production code.
+            return;
+        }
         HandleUnitSelection();
         HandleMovement();
+        HandleSpin();
+    }
+    
+    private void SetBusy() {
+        _isBusy = true;
+    }
+    
+    private void ClearBusy() {
+        _isBusy = false;
     }
 
     private void HandleMovement() {
         if (Input.GetMouseButtonDown(1) && selectedUnit != null) {
+            SetBusy();
 
             GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetPosition());
 
             if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition)) {
-                selectedUnit.GetMoveAction().Move(mouseGridPosition);
+                selectedUnit.GetMoveAction().Move(ClearBusy, mouseGridPosition);
             }
+        }
+    }
+
+    private void HandleSpin() {
+        if (Input.GetKeyDown(KeyCode.R)) {
+            SetBusy();
+            selectedUnit.GetSpinAction().Spin(ClearBusy);
         }
     }
 
@@ -53,9 +77,7 @@ public class UnitActionSystem : MonoBehaviour {
             
         }
 
-        if (Input.GetKeyDown(KeyCode.R)) {
-            selectedUnit.GetSpinAction().Spin();
-        }
+
     }
 
     private void SetSelectedUnit(Unit unit) {

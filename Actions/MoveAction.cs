@@ -12,6 +12,9 @@ public class MoveAction : BaseAction
     // For dev
     [SerializeField] private int maxMoveDistance = 4;
     
+    public delegate void MoveActionComplete();
+    private MoveActionComplete onMoveComplete;
+    
     protected override void Awake() {
         base.Awake();
         targetPosition = transform.position;
@@ -32,6 +35,7 @@ public class MoveAction : BaseAction
             else {
                 unitAnimator.SetBool("IsWalking", false);
                 _isActive = false;
+                onMoveComplete();
             }
         
             float rotateSpeed = 10f;
@@ -39,9 +43,10 @@ public class MoveAction : BaseAction
         }
     }
     
-    public void Move(GridPosition targetPosition) {
+    public void Move(MoveActionComplete onMoveComplete, GridPosition targetPosition) {
         this.targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
         _isActive = true;
+        this.onMoveComplete = onMoveComplete;
     }
 
     public bool IsValidActionGridPosition(GridPosition gridPosition) {

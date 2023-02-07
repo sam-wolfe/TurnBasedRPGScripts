@@ -8,6 +8,9 @@ public class SpinAction : BaseAction {
     private Vector3 originalRotation;
     private float totalSpin;
 
+    public delegate void SpinActionComplete();
+    private SpinActionComplete onSpinComplete;
+
     void Update() {
         if (_isActive) {
             totalSpin += ProcessSpin();
@@ -28,10 +31,12 @@ public class SpinAction : BaseAction {
         _isActive = false;
         transform.eulerAngles = originalRotation;
         totalSpin = 0;
+        onSpinComplete();
     }
 
-    public void Spin() {
+    public void Spin(SpinActionComplete onSpinComplete) {
         _isActive = true;
         originalRotation = transform.eulerAngles;
+        this.onSpinComplete = onSpinComplete;
     }
 }
