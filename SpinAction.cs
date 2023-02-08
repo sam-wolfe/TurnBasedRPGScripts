@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,8 @@ public class SpinAction : BaseAction {
     private Vector3 originalRotation;
     private float totalSpin;
 
-    public delegate void SpinActionComplete();
-    private SpinActionComplete onSpinComplete;
+    public Action SpinActionComplete;
+    private Action onSpinComplete;
 
     void Update() {
         if (_isActive) {
@@ -34,7 +35,7 @@ public class SpinAction : BaseAction {
         onSpinComplete();
     }
 
-    public void Spin(SpinActionComplete onSpinComplete) {
+    public void Spin(Action onSpinComplete) {
         _isActive = true;
         originalRotation = transform.eulerAngles;
         this.onSpinComplete = onSpinComplete;

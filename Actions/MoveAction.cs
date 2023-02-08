@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Grid;
@@ -12,8 +13,8 @@ public class MoveAction : BaseAction
     // For dev
     [SerializeField] private int maxMoveDistance = 4;
     
-    public delegate void MoveActionComplete();
-    private MoveActionComplete onMoveComplete;
+    public Action MoveActionComplete;
+    private Action onMoveComplete;
     
     protected override void Awake() {
         base.Awake();
@@ -43,7 +44,7 @@ public class MoveAction : BaseAction
         }
     }
     
-    public void Move(MoveActionComplete onMoveComplete, GridPosition targetPosition) {
+    public void Move(Action onMoveComplete, GridPosition targetPosition) {
         this.targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
         _isActive = true;
         this.onMoveComplete = onMoveComplete;
