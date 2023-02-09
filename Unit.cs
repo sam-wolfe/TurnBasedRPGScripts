@@ -8,20 +8,21 @@ public class Unit : MonoBehaviour {
     private GridPosition _gridPosition;
     private MoveAction _moveAction;
     private SpinAction _spinAction;
+    private BaseAction[] _baseActions;
     
     // --------------------------------------------------------------------
     // NOTE: my better way of doing this
     //    * Unit has its own event that it envokes when it is selected
     //    * Unit anything can cause a unit to be selected, so no coupling
     //    * Indicator doesn't care what selects the unit, just if a unit is selected
-    
-    
+
     public event Action OnUnitSelected;
     public event Action OnUnitDeSelected;
 
     private void Awake() {
         _moveAction = GetComponent<MoveAction>();
         _spinAction = GetComponent<SpinAction>();
+        _baseActions = GetComponents<BaseAction>();
     }
 
     public void Select() {
@@ -58,7 +59,9 @@ public class Unit : MonoBehaviour {
         }
     }
     
-    
+    public BaseAction[] GetBaseActions() {
+        return _baseActions;
+    }
 
 
 }

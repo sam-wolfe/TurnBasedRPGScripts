@@ -9,6 +9,7 @@ public class MoveAction : BaseAction
     [SerializeField] private Animator unitAnimator;
     private float stoppingDistance = 0.1f;
     private Vector3 targetPosition;
+    protected static string _name = "Move";
     
     // For dev
     [SerializeField] private int maxMoveDistance = 4;
@@ -79,5 +80,9 @@ public class MoveAction : BaseAction
         }
         
         return validGridPositions;
+    }
+    
+    public override string GetActionName() {
+        return _name;
     }
 }

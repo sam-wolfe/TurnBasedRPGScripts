@@ -25,6 +25,7 @@ public class UnitActionSystem : MonoBehaviour {
             return;
         }
         instance = this;
+        Debug.Log(this);
     }
 
     void Update() {
@@ -79,12 +80,19 @@ public class UnitActionSystem : MonoBehaviour {
 
 
     }
+    
 
     private void SetSelectedUnit(Unit unit) {
         selectedUnit?.DeSelect();
         unit.Select();
-
+        
         selectedUnit = unit;
+        
+        // Added this back in later to communicate to classes that arent
+        // children of Unit.
+        OnSelectedUnitChanged?.Invoke(unit);
+        
+        
         
         // CodeMonkey did it this way with a singleton pattern, my way has the unit as the abstraction between 
         // the action system and the indicator.

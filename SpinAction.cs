@@ -8,6 +8,7 @@ public class SpinAction : BaseAction {
     [SerializeField] private float spinAmount = 360;
     private Vector3 originalRotation;
     private float totalSpin;
+    protected static string _name = "Spin";
 
     void Update() {
         if (_isActive) {
@@ -36,5 +37,9 @@ public class SpinAction : BaseAction {
         _isActive = true;
         originalRotation = transform.eulerAngles;
         this.onActionComplete = onActionComplete;
+    }
+    
+    public override string GetActionName() {
+        return _name;
     }
 }
