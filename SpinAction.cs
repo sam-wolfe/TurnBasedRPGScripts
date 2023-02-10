@@ -14,7 +14,6 @@ public class SpinAction : BaseAction {
         if (_isActive) {
             totalSpin += ProcessSpin();
             if (totalSpin >= spinAmount) {
-                // we are done spinning
                 EndSpin();
             }
         }
