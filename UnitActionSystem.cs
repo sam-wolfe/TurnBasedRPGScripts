@@ -47,25 +47,6 @@ public class UnitActionSystem : MonoBehaviour {
         _isBusy = false;
     }
 
-    private void HandleMovement() {
-        if (Input.GetMouseButtonDown(1) && selectedUnit != null) {
-
-            GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetPosition());
-
-            if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition)) {
-                SetBusy();
-                // selectedUnit.GetMoveAction().TakeAction(ClearBusy, mouseGridPosition);
-            }
-        }
-    }
-
-    private void HandleSpin() {
-        if (Input.GetKeyDown(KeyCode.R)) {
-            SetBusy();
-            // selectedUnit.GetSpinAction().TakeAction(ClearBusy, new GridPosition());
-        }
-    }
-
     private void HandleSelectedAction() {
         if (selectedUnit == null || _selectedAction == null) {
             // Sanity check
