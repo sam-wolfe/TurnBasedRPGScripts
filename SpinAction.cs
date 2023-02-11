@@ -37,6 +37,11 @@ public class SpinAction : BaseAction {
         _isActive = true;
         originalRotation = transform.eulerAngles;
         this.onActionComplete = onActionComplete;
+        
+        // TODO where you left off
+        // TODO use the target position to determine the direction to spin
+        // TODO update validation to check if the target position is a valid direction to spin
+        // TODO make sure onAactionStarted is only called if the action is valid
 
         // This action can't fail to run
         onActionStarted();
