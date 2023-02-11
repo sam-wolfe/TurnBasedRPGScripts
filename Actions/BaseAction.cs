@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Grid;
 using UnityEngine;
 
 public abstract class BaseAction : MonoBehaviour {
@@ -13,6 +14,8 @@ public abstract class BaseAction : MonoBehaviour {
     protected virtual void Awake() {
         _unit = GetComponent<Unit>();
     }
+    
+    public abstract void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition);
     
     public abstract string GetActionName();
 

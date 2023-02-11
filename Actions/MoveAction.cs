@@ -44,10 +44,14 @@ public class MoveAction : BaseAction
         }
     }
     
-    public void Move(Action onActionComplete, GridPosition targetPosition) {
-        this.targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
-        _isActive = true;
-        this.onActionComplete = onActionComplete;
+    public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
+        
+        if (IsValidActionGridPosition(targetPosition)) {
+            this.targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
+            _isActive = true;
+            this.onActionComplete = onActionComplete;
+            onActionStarted();
+        }
     }
 
     public bool IsValidActionGridPosition(GridPosition gridPosition) {

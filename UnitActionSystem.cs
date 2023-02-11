@@ -16,6 +16,8 @@ public class UnitActionSystem : MonoBehaviour {
     [SerializeField] 
     private LayerMask unitLayerMask;
 
+    private BaseAction _selectedAction;
+
     private bool _isBusy;
 
     private void Awake() {
@@ -30,13 +32,11 @@ public class UnitActionSystem : MonoBehaviour {
 
     void Update() {
         if (_isBusy) {
-            // TODO early return is from lessons. Refactor if reused in
-            //  production code.
+            // Sanity check
             return;
         }
         HandleUnitSelection();
-        HandleMovement();
-        HandleSpin();
+        HandleSelectedAction();
     }
     
     private void SetBusy() {
@@ -54,7 +54,7 @@ public class UnitActionSystem : MonoBehaviour {
 
             if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition)) {
                 SetBusy();
-                selectedUnit.GetMoveAction().Move(ClearBusy, mouseGridPosition);
+                // selectedUnit.GetMoveAction().TakeAction(ClearBusy, mouseGridPosition);
             }
         }
     }
@@ -62,7 +62,20 @@ public class UnitActionSystem : MonoBehaviour {
     private void HandleSpin() {
         if (Input.GetKeyDown(KeyCode.R)) {
             SetBusy();
-            selectedUnit.GetSpinAction().Spin(ClearBusy);
+            // selectedUnit.GetSpinAction().TakeAction(ClearBusy, new GridPosition());
+        }
+    }
+
+    private void HandleSelectedAction() {
+        if (selectedUnit == null || _selectedAction == null) {
+            // Sanity check
+            return;
+        }
+        
+        if (Input.GetMouseButtonDown(1)) {
+            GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetPosition());
+
+            _selectedAction.TakeAction(SetBusy, ClearBusy, mouseGridPosition);
         }
     }
 
@@ -87,6 +100,7 @@ public class UnitActionSystem : MonoBehaviour {
         unit.Select();
         
         selectedUnit = unit;
+        SetSelectedAction(unit.GetMoveAction());
         
         // Added this back in later to communicate to classes that arent
         // children of Unit.
@@ -98,6 +112,10 @@ public class UnitActionSystem : MonoBehaviour {
         // the action system and the indicator.
         // OnSelectedUnitChanged?.Invoke(selectedUnit);
         // selectedUnit = unit;
+    }
+    
+    public void SetSelectedAction(BaseAction action) {
+        _selectedAction = action;
     }
 
     public Unit GetSelectedUnit => selectedUnit;

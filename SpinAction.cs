@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Grid;
 using UnityEngine;
 
 public class SpinAction : BaseAction {
@@ -32,10 +33,13 @@ public class SpinAction : BaseAction {
         onActionComplete();
     }
 
-    public void Spin(Action onActionComplete) {
+    public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
         _isActive = true;
         originalRotation = transform.eulerAngles;
         this.onActionComplete = onActionComplete;
+
+        // This action can't fail to run
+        onActionStarted();
     }
     
     public override string GetActionName() {
