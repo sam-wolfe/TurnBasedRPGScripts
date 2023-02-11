@@ -49,11 +49,11 @@ public class UnitActionSystem : MonoBehaviour {
 
     private void HandleMovement() {
         if (Input.GetMouseButtonDown(1) && selectedUnit != null) {
-            SetBusy();
 
             GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetPosition());
 
             if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition)) {
+                SetBusy();
                 selectedUnit.GetMoveAction().Move(ClearBusy, mouseGridPosition);
             }
         }
