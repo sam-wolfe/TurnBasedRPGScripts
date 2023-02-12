@@ -14,12 +14,25 @@ public class TurnSystemUI : MonoBehaviour {
     private TextMeshProUGUI _buttonText;
 
     private void Start() {
-        _turnNumberText.text = String.Format(_turnNumbertFormat, TurnSystem.instance.GetTurnNumber());
+        _turnNumberText.text = String.Format(
+            _turnNumbertFormat, TurnSystem.instance.GetTurnNumber());
         
         _button.onClick.AddListener(() => {
             TurnSystem.instance.NextTurn();
-            _turnNumberText.text = String.Format(_turnNumbertFormat, TurnSystem.instance.GetTurnNumber());
         });
+    }
+
+    private void OnEnable() {
+        TurnSystem.instance.OnTurnChanged += HandleTurnChange;
+    }
+    
+    private void OnDisable() {
+        TurnSystem.instance.OnTurnChanged -= HandleTurnChange;
+    }
+
+    private void HandleTurnChange() {
+        _turnNumberText.text = String.Format(
+            _turnNumbertFormat, TurnSystem.instance.GetTurnNumber());
     }
 
 }
