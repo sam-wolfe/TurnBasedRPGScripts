@@ -50,4 +50,37 @@ public class SpinAction : BaseAction {
     public override string GetActionName() {
         return _name;
     }
+    
+    public override bool IsValidActionGridPosition(GridPosition gridPosition) {
+        List<GridPosition> validGridPositionList = GetValidActionGridPositions();
+        return validGridPositionList.Contains(gridPosition);
+    }
+    
+    public override List<GridPosition> GetValidActionGridPositions() {
+        List<GridPosition> validGridPositions = new List<GridPosition>();
+        GridPosition unitGridPosition = _unit.GetGridPosition();
+
+        // Hardcoded 1's as we only want to show adjacent positions
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                GridPosition offsetGridPosition = new GridPosition(x, z);
+                GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
+                if (!LevelGrid.instance.IsValidGridPosition(testGridPosition)) {
+                    // Check if new position is outside bounds of grid
+                    continue;
+                }
+                if (testGridPosition == unitGridPosition) {
+                    // Test if this is the current position of unit
+                    continue;
+                }
+                if (LevelGrid.instance.IsOccupied(testGridPosition)) {
+                    // Test if any other unit is already in target position
+                    continue;
+                }
+                validGridPositions.Add(testGridPosition);
+            }
+        }
+        
+        return validGridPositions;
+    }
 }

@@ -54,12 +54,12 @@ public class MoveAction : BaseAction
         }
     }
 
-    public bool IsValidActionGridPosition(GridPosition gridPosition) {
+    public override bool IsValidActionGridPosition(GridPosition gridPosition) {
         List<GridPosition> validGridPositionList = GetValidActionGridPositions();
         return validGridPositionList.Contains(gridPosition);
     }
 
-    public List<GridPosition> GetValidActionGridPositions() {
+    public override List<GridPosition> GetValidActionGridPositions() {
         List<GridPosition> validGridPositions = new List<GridPosition>();
         GridPosition unitGridPosition = _unit.GetGridPosition();
 

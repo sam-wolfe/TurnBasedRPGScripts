@@ -1,6 +1,7 @@
 using System;
 using Grid;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitActionSystem : MonoBehaviour {
 
@@ -35,8 +36,11 @@ public class UnitActionSystem : MonoBehaviour {
             // Sanity check
             return;
         }
-        HandleUnitSelection();
-        HandleSelectedAction();
+
+        if (!EventSystem.current.IsPointerOverGameObject()) {
+            HandleUnitSelection();
+            HandleSelectedAction();    
+        }
     }
     
     private void SetBusy() {
@@ -77,6 +81,11 @@ public class UnitActionSystem : MonoBehaviour {
     
 
     private void SetSelectedUnit(Unit unit) {
+        if (selectedUnit == unit) {
+            // Sanity , unit is already the selected unit
+            return;
+        }
+        
         selectedUnit?.DeSelect();
         unit.Select();
         
@@ -98,6 +107,8 @@ public class UnitActionSystem : MonoBehaviour {
     public void SetSelectedAction(BaseAction action) {
         _selectedAction = action;
     }
+    
+    public BaseAction GetSelectedAction => _selectedAction;
 
     public Unit GetSelectedUnit => selectedUnit;
 
