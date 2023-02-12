@@ -17,11 +17,13 @@ public class UnitActionSystemUI : MonoBehaviour {
     private void OnEnable() {
         UnitActionSystem.instance.OnSelectedUnitChanged += HandleSelectedUnitChanged;
         UnitActionSystem.instance.OnSelectedActionChanged += HandleSelectedActionChanged;
+        UnitActionSystem.instance.OnBusyChanged += HandleBusyChanged;
     }
     
     private void OnDisable() {
         UnitActionSystem.instance.OnSelectedUnitChanged -= HandleSelectedUnitChanged;
         UnitActionSystem.instance.OnSelectedActionChanged -= HandleSelectedActionChanged;
+        UnitActionSystem.instance.OnBusyChanged -= HandleBusyChanged;
     }
     
     private void HandleSelectedUnitChanged(Unit unit) {
@@ -50,7 +52,16 @@ public class UnitActionSystemUI : MonoBehaviour {
         foreach (ActionButtonUI button in _actionButtons) {
             button.SetSelectedVisual(button.action == UnitActionSystem.instance.GetSelectedAction);
         }
-        
+    }
+
+    private void HandleBusyChanged(bool busy) {
+        foreach (ActionButtonUI button in _actionButtons) {
+            button.SetDisabled(busy);
+            if (!busy) {
+                // Re-select the action if it was selected before
+                button.SetSelectedVisual(button.action == UnitActionSystem.instance.GetSelectedAction);
+            }
+        }
     }
 
 }
