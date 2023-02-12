@@ -8,6 +8,7 @@ public class UnitActionSystem : MonoBehaviour {
     public static UnitActionSystem instance { get; private set; }
     
     public event Action<Unit> OnSelectedUnitChanged;
+    public event Action OnSelectedActionChanged;
 
     [SerializeField]
     private Unit selectedUnit;
@@ -106,6 +107,7 @@ public class UnitActionSystem : MonoBehaviour {
     
     public void SetSelectedAction(BaseAction action) {
         _selectedAction = action;
+        OnSelectedActionChanged?.Invoke();
     }
     
     public BaseAction GetSelectedAction => _selectedAction;
