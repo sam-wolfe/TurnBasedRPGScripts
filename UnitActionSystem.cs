@@ -12,7 +12,7 @@ public class UnitActionSystem : MonoBehaviour {
     public event Action<bool> OnBusyChanged;
 
     [SerializeField]
-    private Unit selectedUnit;
+    private Unit _selectedUnit;
     // TODO learn to implement this
     // public Unit SelectedUnit => selectedUnit;
     
@@ -47,6 +47,13 @@ public class UnitActionSystem : MonoBehaviour {
     
     private void SetBusy() {
         _isBusy = true;
+        bool pointsWereSpent = _selectedUnit.TrySpendActionPoints(_selectedAction);
+        
+        if (!pointsWereSpent) {
+            throw new Exception("Unit tried to spend action points but failed! \n" +
+                                "This should never happen, check the logic.");
+        }
+        
         OnBusyChanged?.Invoke(true);
     }
     
@@ -56,7 +63,7 @@ public class UnitActionSystem : MonoBehaviour {
     }
 
     private void HandleSelectedAction() {
-        if (selectedUnit == null || _selectedAction == null) {
+        if (_selectedUnit == null || _selectedAction == null) {
             // Sanity check
             return;
         }
@@ -64,7 +71,10 @@ public class UnitActionSystem : MonoBehaviour {
         if (Input.GetMouseButtonDown(1)) {
             GridPosition mouseGridPosition = LevelGrid.instance.GetGridPosition(MouseWorld.GetPosition());
 
-            _selectedAction.TakeAction(SetBusy, ClearBusy, mouseGridPosition);
+            // Check if unit has enough AP to perform action
+            if (_selectedUnit.HasActionPointsForAction(_selectedAction)) {
+                _selectedAction.TakeAction(SetBusy, ClearBusy, mouseGridPosition);
+            }
         }
     }
 
@@ -85,15 +95,15 @@ public class UnitActionSystem : MonoBehaviour {
     
 
     private void SetSelectedUnit(Unit unit) {
-        if (selectedUnit == unit) {
+        if (_selectedUnit == unit) {
             // Sanity , unit is already the selected unit
             return;
         }
         
-        selectedUnit?.DeSelect();
+        _selectedUnit?.DeSelect();
         unit.Select();
         
-        selectedUnit = unit;
+        _selectedUnit = unit;
         SetSelectedAction(unit.GetMoveAction());
         
         // Added this back in later to communicate to classes that arent
@@ -115,7 +125,7 @@ public class UnitActionSystem : MonoBehaviour {
     
     public BaseAction GetSelectedAction => _selectedAction;
 
-    public Unit GetSelectedUnit => selectedUnit;
+    public Unit GetSelectedUnit => _selectedUnit;
 
     
 }

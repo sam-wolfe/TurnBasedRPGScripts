@@ -7,6 +7,7 @@ using UnityEngine;
 public class SpinAction : BaseAction {
 
     [SerializeField] private float spinAmount = 360;
+    [SerializeField] private int actionPointCost = 0;
     private Vector3 originalRotation;
     private float totalSpin;
     protected static string _name = "Spin";
@@ -82,5 +83,9 @@ public class SpinAction : BaseAction {
         }
         
         return validGridPositions;
+    }
+    
+    public override int GetActionPointsCost() {
+        return actionPointCost;
     }
 }

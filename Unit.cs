@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour {
     private MoveAction _moveAction;
     private SpinAction _spinAction;
     private BaseAction[] _baseActions;
+    [SerializeField] private int _actionPoints;
     
     // --------------------------------------------------------------------
     // NOTE: my better way of doing this
@@ -62,6 +63,30 @@ public class Unit : MonoBehaviour {
     public BaseAction[] GetBaseActions() {
         return _baseActions;
     }
+    
+    public bool HasActionPoints() {
+        return _actionPoints > 0;
+    }
+    
+    public bool HasActionPointsForAction(BaseAction action) {
+        if (_actionPoints >= action.GetActionPointsCost()) {
+            return true;
+        }
 
+        return false;
+    }
+    
+    private void SpendActionPoints(int amount) {
+        _actionPoints -= amount;
+    }
+
+    public bool TrySpendActionPoints(BaseAction action) {
+        if (HasActionPointsForAction(action)) {
+            SpendActionPoints(action.GetActionPointsCost());
+            return true;
+        }
+
+        return false;
+    }
 
 }

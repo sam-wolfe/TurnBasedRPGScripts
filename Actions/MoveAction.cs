@@ -7,6 +7,7 @@ using UnityEngine;
 public class MoveAction : BaseAction
 {
     [SerializeField] private Animator unitAnimator;
+    [SerializeField] private int actionPointCost = 1;
     private float stoppingDistance = 0.1f;
     private Vector3 targetPosition;
     protected static string _name = "Move";
@@ -88,5 +89,9 @@ public class MoveAction : BaseAction
     
     public override string GetActionName() {
         return _name;
+    }
+    
+    public override int GetActionPointsCost() {
+        return actionPointCost;
     }
 }
