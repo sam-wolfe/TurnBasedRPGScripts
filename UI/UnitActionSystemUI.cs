@@ -78,10 +78,12 @@ public class UnitActionSystemUI : MonoBehaviour {
             // No unit selected
             _actionPointsText.text = "";
         }
-        _actionPointsText.text = String.Format(
-            _actionPointsTextFormat, 
-            UnitActionSystem.instance.GetSelectedUnit.GetActionPoints()
-        );
+        else {
+            _actionPointsText.text = String.Format(
+                _actionPointsTextFormat, 
+                UnitActionSystem.instance.GetSelectedUnit.GetActionPoints()
+            );
+        }
     }
 
 }
