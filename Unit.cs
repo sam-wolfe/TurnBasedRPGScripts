@@ -68,6 +68,11 @@ public class Unit : MonoBehaviour {
         return _actionPoints > 0;
     }
     
+    public int GetActionPoints() {
+        return _actionPoints;
+    }
+
+    
     public bool HasActionPointsForAction(BaseAction action) {
         if (_actionPoints >= action.GetActionPointsCost()) {
             return true;
