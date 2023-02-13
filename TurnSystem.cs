@@ -18,7 +18,6 @@ public class TurnSystem : MonoBehaviour {
             return;
         }
         instance = this;
-        Debug.Log(this);
     }
     
 

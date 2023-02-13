@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour {
     private SpinAction _spinAction;
     private BaseAction[] _baseActions;
     [SerializeField] private int _actionPoints;
+    [SerializeField] private int _maxActionPoints;
     
     // --------------------------------------------------------------------
     // NOTE: my better way of doing this
@@ -19,11 +20,15 @@ public class Unit : MonoBehaviour {
 
     public event Action OnUnitSelected;
     public event Action OnUnitDeSelected;
+    
+    public static event Action OnAnyActionPointsChanged;
 
     private void Awake() {
         _moveAction = GetComponent<MoveAction>();
         _spinAction = GetComponent<SpinAction>();
         _baseActions = GetComponents<BaseAction>();
+        
+        _actionPoints = _maxActionPoints;
     }
 
     public void Select() {
@@ -49,6 +54,8 @@ public class Unit : MonoBehaviour {
     void Start() {
         _gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
         LevelGrid.instance.AddUnitAtGridPosition(_gridPosition, this);
+        
+        TurnSystem.instance.OnTurnChanged += HandleTurnChanged;
     }
 
     void Update() {
@@ -88,10 +95,16 @@ public class Unit : MonoBehaviour {
     public bool TrySpendActionPoints(BaseAction action) {
         if (HasActionPointsForAction(action)) {
             SpendActionPoints(action.GetActionPointsCost());
+            OnAnyActionPointsChanged?.Invoke();
             return true;
         }
 
         return false;
+    }
+    
+    private void HandleTurnChanged() {
+        _actionPoints = _maxActionPoints;
+        OnAnyActionPointsChanged?.Invoke();
     }
 
 }

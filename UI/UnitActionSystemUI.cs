@@ -23,12 +23,16 @@ public class UnitActionSystemUI : MonoBehaviour {
         UnitActionSystem.instance.OnSelectedUnitChanged += HandleSelectedUnitChanged;
         UnitActionSystem.instance.OnSelectedActionChanged += HandleSelectedActionChanged;
         UnitActionSystem.instance.OnBusyChanged += HandleBusyChanged;
+        TurnSystem.instance.OnTurnChanged += HandleTurnChanged;
+        Unit.OnAnyActionPointsChanged += HandleAnyActionPointsChanged;
     }
     
     private void OnDisable() {
         UnitActionSystem.instance.OnSelectedUnitChanged -= HandleSelectedUnitChanged;
         UnitActionSystem.instance.OnSelectedActionChanged -= HandleSelectedActionChanged;
         UnitActionSystem.instance.OnBusyChanged -= HandleBusyChanged;
+        TurnSystem.instance.OnTurnChanged -= HandleTurnChanged;
+        Unit.OnAnyActionPointsChanged -= HandleAnyActionPointsChanged;
     }
     
     private void HandleSelectedUnitChanged(Unit unit) {
@@ -84,6 +88,14 @@ public class UnitActionSystemUI : MonoBehaviour {
                 UnitActionSystem.instance.GetSelectedUnit.GetActionPoints()
             );
         }
+    }
+    
+    private void HandleTurnChanged() {
+        UpdateActionPoints();
+    }
+    
+    private void HandleAnyActionPointsChanged() {
+        UpdateActionPoints();
     }
 
 }

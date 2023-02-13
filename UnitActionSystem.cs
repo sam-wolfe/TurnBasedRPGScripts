@@ -30,7 +30,6 @@ public class UnitActionSystem : MonoBehaviour {
             return;
         }
         instance = this;
-        Debug.Log(this);
     }
 
     void Update() {
