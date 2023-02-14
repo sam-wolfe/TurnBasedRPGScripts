@@ -11,6 +11,8 @@ public class Unit : MonoBehaviour {
     private BaseAction[] _baseActions;
     [SerializeField] private int _actionPoints;
     [SerializeField] private int _maxActionPoints;
+
+    [SerializeField] private bool _isEnemy;
     
     // --------------------------------------------------------------------
     // NOTE: my better way of doing this
@@ -103,8 +105,15 @@ public class Unit : MonoBehaviour {
     }
     
     private void HandleTurnChanged() {
-        _actionPoints = _maxActionPoints;
-        OnAnyActionPointsChanged?.Invoke();
+        if ((IsEnemy() && !TurnSystem.instance.IsPlayerTurn()) 
+            || (!IsEnemy() && TurnSystem.instance.IsPlayerTurn())) {
+            _actionPoints = _maxActionPoints;
+            OnAnyActionPointsChanged?.Invoke();
+        }
+    }
+    
+    public bool IsEnemy() {
+        return _isEnemy;
     }
 
 }

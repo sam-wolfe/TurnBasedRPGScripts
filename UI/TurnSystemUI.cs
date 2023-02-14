@@ -12,6 +12,7 @@ public class TurnSystemUI : MonoBehaviour {
     [SerializeField] private string _turnNumbertFormat = "Turn {0}";
     
     private TextMeshProUGUI _buttonText;
+    private Color _initialTextColor;
 
     private void Start() {
         _turnNumberText.text = String.Format(
@@ -20,6 +21,9 @@ public class TurnSystemUI : MonoBehaviour {
         _button.onClick.AddListener(() => {
             TurnSystem.instance.NextTurn();
         });
+        
+        _buttonText = _button.GetComponentInChildren<TextMeshProUGUI>();
+        _initialTextColor = _buttonText.color;
     }
 
     private void OnEnable() {
@@ -33,6 +37,21 @@ public class TurnSystemUI : MonoBehaviour {
     private void HandleTurnChange() {
         _turnNumberText.text = String.Format(
             _turnNumbertFormat, TurnSystem.instance.GetTurnNumber());
+        UpdateEndTurnButton();
+    }
+    
+    private void UpdateEndTurnButton() {
+        if (!TurnSystem.instance.IsPlayerTurn()) {
+            _button.interactable = false;
+
+            var textColor = _buttonText.color;
+            textColor.a = 0.1f;
+            _buttonText.color = textColor;
+        } else {
+            _button.interactable = true;  
+            
+            _buttonText.color = _initialTextColor;
+        }
     }
 
 }

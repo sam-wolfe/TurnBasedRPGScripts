@@ -38,7 +38,7 @@ public class UnitActionSystem : MonoBehaviour {
             return;
         }
 
-        if (!EventSystem.current.IsPointerOverGameObject()) {
+        if (!EventSystem.current.IsPointerOverGameObject() && TurnSystem.instance.IsPlayerTurn()) {
             HandleUnitSelection();
             HandleSelectedAction();    
         }
@@ -94,8 +94,8 @@ public class UnitActionSystem : MonoBehaviour {
     
 
     private void SetSelectedUnit(Unit unit) {
-        if (_selectedUnit == unit) {
-            // Sanity , unit is already the selected unit
+        if (_selectedUnit == unit || unit.IsEnemy()) {
+            // Sanity , unit is already the selected unit, or is an enemy
             return;
         }
         

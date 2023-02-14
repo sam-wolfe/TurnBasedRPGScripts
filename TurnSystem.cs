@@ -11,6 +11,8 @@ public class TurnSystem : MonoBehaviour {
     
     private int turnNumber = 1;
     
+    private bool _isPlayerTurn = true;
+    
     private void Awake() {
         if (instance != null) {
             Debug.LogError("You added an extra TurnSystem ya dingus: " + transform + " - " + instance);
@@ -23,10 +25,15 @@ public class TurnSystem : MonoBehaviour {
 
     public void NextTurn() {
         turnNumber++;
+        _isPlayerTurn = !_isPlayerTurn;
         OnTurnChanged?.Invoke();
     }
     
     public int GetTurnNumber() {
         return turnNumber;
+    }
+    
+    public bool IsPlayerTurn() {
+        return _isPlayerTurn;
     }
 }
