@@ -55,4 +55,17 @@ public class GridCell {
     public bool HasAnyUnit() {
         return _unitList.Any();
     }
+    
+    public Unit GetFirstUnit() {
+        // This is written assuming that there is only one unit per cell 
+        // at the time an action is taken.
+        // If in the future we want to allow multiple units per cell,
+        // we will need to change this.
+
+        if (HasAnyUnit()) {
+            return _unitList[0];
+        } else {
+            return null;
+        }
+    }
 }

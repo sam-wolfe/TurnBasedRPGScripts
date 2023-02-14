@@ -10,12 +10,17 @@ public class MoveAction : BaseAction
     [SerializeField] private int actionPointCost = 1;
     private float stoppingDistance = 0.1f;
     private Vector3 targetPosition;
-    protected static string _name = "Move";
-    
+
     // For dev
     [SerializeField] private int maxMoveDistance = 4;
     
     private Action onMoveComplete;
+    
+    protected override string _name
+    {
+        get { return "Move"; }
+        set { }
+    }
     
     protected override void Awake() {
         base.Awake();
@@ -55,11 +60,6 @@ public class MoveAction : BaseAction
         }
     }
 
-    public override bool IsValidActionGridPosition(GridPosition gridPosition) {
-        List<GridPosition> validGridPositionList = GetValidActionGridPositions();
-        return validGridPositionList.Contains(gridPosition);
-    }
-
     public override List<GridPosition> GetValidActionGridPositions() {
         List<GridPosition> validGridPositions = new List<GridPosition>();
         GridPosition unitGridPosition = _unit.GetGridPosition();
@@ -85,10 +85,6 @@ public class MoveAction : BaseAction
         }
         
         return validGridPositions;
-    }
-    
-    public override string GetActionName() {
-        return _name;
     }
     
     public override int GetActionPointsCost() {
