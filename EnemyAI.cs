@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
+public class EnemyAI : MonoBehaviour {
+
+    public float timer;
+    
+    void Start() {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+
+        if (!TurnSystem.instance.IsPlayerTurn()) {
+            timer -= Time.deltaTime;
+            if (timer <= 0) {
+                timer = 3;
+                TurnSystem.instance.NextTurn();
+            }
+        }
+
     }
 }
