@@ -9,7 +9,7 @@ public abstract class BaseAction : MonoBehaviour {
     protected Unit _unit;
     protected bool _isActive;
     protected Action onActionComplete;
-    abstract protected string _name { get; set;}
+    protected abstract string _name { get; set;}
 
     protected virtual void Awake() {
         _unit = GetComponent<Unit>();
@@ -56,6 +56,16 @@ public abstract class BaseAction : MonoBehaviour {
     
     public virtual string GetActionName() {
         return _name;
+    }
+
+    protected void InitiateAction(Action onActionComplete) {
+        _isActive = true;
+        this.onActionComplete = onActionComplete;
+    }
+    
+    protected void CompleteAction() {
+        _isActive = false;
+        onActionComplete();
     }
 
 

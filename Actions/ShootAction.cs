@@ -5,13 +5,26 @@ using Grid;
 using UnityEngine;
 
 public class ShootAction : BaseAction {
+
+    private enum State {
+        Aiming,
+        Shooting,
+        Cooloff
+    }
     
     [SerializeField] private Animator unitAnimator;
     [SerializeField] private int actionPointCost = 1;
     [SerializeField] private int _maxRange = 4;
+
+    [SerializeField] private float _aimingStateTime = 1f;
+    [SerializeField] private float _shootingStateTime = 0.1f;
+    [SerializeField] private float _cooloffStateTime = 0.5f;
+    
     private Vector3 targetPosition;
-    private Unit _unit;
-    private Action onShootComplete;
+    private State state;
+    private float stateTimer;
+    private Unit _targetUnit;
+    private bool _canShootBullet;
     
     protected override string _name
     {
@@ -24,23 +37,57 @@ public class ShootAction : BaseAction {
     }
 
     void Update() {
-        if (_isActive) {
-            Debug.Log("Bang Bang!");
-            EndShoot();
+        if (!_isActive) {
+            return;
+        }
+
+        stateTimer -= Time.deltaTime;
+        
+        switch (state) {
+            case State.Aiming:
+                float rotateSpeed = 10f;
+                Vector3 shootDirection = (_targetUnit.transform.position - transform.position).normalized;
+                transform.forward = Vector3.Lerp(transform.forward, shootDirection, Time.deltaTime * rotateSpeed);
+                
+                CheckNextStateTransition(State.Shooting, _shootingStateTime);
+                break;
+            case State.Shooting:
+                if (_canShootBullet) {
+                    Shoot();
+                }
+                
+                Shoot();
+                CheckNextStateTransition(State.Cooloff, _cooloffStateTime);
+                break;
+            case State.Cooloff:
+                CheckNextStateTransition(State.Aiming, 0f);
+                break;
         }
     }
 
-    private void EndShoot() {
-        _isActive = false;
-        onActionComplete();
+    private void Shoot() {
+        _targetUnit.Damage();
+    }
+
+    private void CheckNextStateTransition(State newState, float newStateTimer) {
+        if (state == State.Cooloff && stateTimer <= 0f) {
+            _isActive = false;
+            CompleteAction();
+        } else if (stateTimer <= 0f) {
+            state = newState;
+            stateTimer = newStateTimer;
+        }
     }
 
     public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
-        _isActive = true;
-        this.onActionComplete = onActionComplete;
         
-        // This action can't fail to run
-        onActionStarted();
+        if (IsValidActionGridPosition(targetPosition)) {
+            InitiateAction(onActionComplete);
+            
+            state = State.Aiming;
+            stateTimer = _aimingStateTime;
+            onActionStarted();
+        }
     }
     
     public override List<GridPosition> GetValidActionGridPositions() {
@@ -55,6 +102,13 @@ public class ShootAction : BaseAction {
                     // Check if new position is outside bounds of grid
                     continue;
                 }
+
+                int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+                if (testDistance > _maxRange) {
+                    // Test if new position is outside of max range
+                    continue;
+                }
+                
                 if (testGridPosition == unitGridPosition) {
                     // Test if this is the current position of unit
                     continue;
@@ -66,9 +120,13 @@ public class ShootAction : BaseAction {
                 
                 Unit targetUnit = LevelGrid.instance.GetUnitAtGridPosition(testGridPosition);
 
-                // This assumes that we checked above that the position is occupied
-                // If we didn't check that, we could get a null reference exception here
-                if (targetUnit.IsEnemy() == _unit.IsEnemy()) {
+                if (targetUnit != null) {
+                    _targetUnit = targetUnit;
+                } else {
+                    continue;
+                }
+
+                if (_targetUnit.IsEnemy() == _unit.IsEnemy()) {
                     // Both units are on the same team
                     continue;
                 }

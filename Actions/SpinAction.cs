@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class SpinAction : BaseAction {
 
-    [SerializeField] private float spinAmount = 360;
     [SerializeField] private int actionPointCost = 0;
-    private Vector3 originalRotation;
+    [SerializeField] private float _spinDuration = 1.5f;
+    private Vector3 _targetPosition;
     private float totalSpin;
     
     protected override string _name
@@ -19,34 +19,26 @@ public class SpinAction : BaseAction {
 
     void Update() {
         if (_isActive) {
-            totalSpin += ProcessSpin();
-            if (totalSpin >= spinAmount) {
-                EndSpin();
-            }
+            ProcessSpin();
         }
     }
     
-    private float ProcessSpin() {
-        float addSpinAmount = 360f * Time.deltaTime;
-        transform.eulerAngles += new Vector3(0, addSpinAmount,0);
-        return addSpinAmount;
-    }
-    
-    private void EndSpin() {
-        _isActive = false;
-        transform.eulerAngles = originalRotation;
-        totalSpin = 0;
-        onActionComplete();
+    private void ProcessSpin() {
+        float rotateSpeed = 10f;
+        Vector3 spinDirection = (_targetPosition - transform.position).normalized;
+        transform.forward = Vector3.Lerp(transform.forward, spinDirection, Time.deltaTime * rotateSpeed);
+        
+        // if transform.forward is close to spinDirection, then we can stop spinning
+        float dotProduct = Vector3.Dot(transform.forward, spinDirection);
+        if (dotProduct > Mathf.Abs(0.99f)) {
+            CompleteAction();
+        }
     }
 
     public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
-        _isActive = true;
-        originalRotation = transform.eulerAngles;
-        this.onActionComplete = onActionComplete;
+        InitiateAction(onActionComplete);
         
-        // TODO use the target position to determine the direction to spin
-        // TODO update validation to check if the target position is a valid direction to spin
-        // TODO make sure onAactionStarted is only called if the action is valid
+        _targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
 
         // This action can't fail to run
         onActionStarted();

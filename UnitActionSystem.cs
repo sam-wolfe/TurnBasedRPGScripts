@@ -57,8 +57,11 @@ public class UnitActionSystem : MonoBehaviour {
     }
     
     private void ClearBusy() {
-        _isBusy = false;
-        OnBusyChanged?.Invoke(false);
+        if (_isBusy) {
+            // Don't fire event if we're not busy
+            _isBusy = false;
+            OnBusyChanged?.Invoke(false);
+        }
     }
 
     private void HandleSelectedAction() {

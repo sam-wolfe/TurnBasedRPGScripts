@@ -116,4 +116,8 @@ public class Unit : MonoBehaviour {
         return _isEnemy;
     }
 
+    public void Damage() {
+        Debug.Log(transform + " was damaged!");
+    }
+
 }
