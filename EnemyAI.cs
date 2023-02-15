@@ -5,10 +5,6 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour {
 
     public float timer;
-    
-    void Start() {
-        
-    }
 
     void Update() {
 
