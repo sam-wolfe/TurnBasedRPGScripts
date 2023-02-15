@@ -37,6 +37,10 @@ public class ShootAction : BaseAction {
     }
 
     void Update() {
+        ProcessShoot();
+    }
+
+    private void ProcessShoot() {
         if (!_isActive) {
             return;
         }
@@ -65,10 +69,6 @@ public class ShootAction : BaseAction {
         }
     }
 
-    private void Shoot() {
-        _targetUnit.Damage();
-    }
-
     private void CheckNextStateTransition(State newState, float newStateTimer) {
         if (state == State.Cooloff && stateTimer <= 0f) {
             _isActive = false;
@@ -77,6 +77,10 @@ public class ShootAction : BaseAction {
             state = newState;
             stateTimer = newStateTimer;
         }
+    }
+    
+    private void Shoot() {
+        _targetUnit.Damage();
     }
 
     public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
@@ -136,6 +140,10 @@ public class ShootAction : BaseAction {
         }
         
         return validGridPositions;
+    }
+    
+    public override int GetActionPointsCost() {
+        return actionPointCost;
     }
 
 }

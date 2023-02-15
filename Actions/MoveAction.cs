@@ -25,8 +25,11 @@ public class MoveAction : BaseAction
         targetPosition = transform.position;
     }
 
-    void Update()
-    {
+    void Update() {
+        ProcessMove();
+    }
+
+    private void ProcessMove() {
         if (_isActive) {
             Vector3 moveDirection = (targetPosition - transform.position).normalized;
 
