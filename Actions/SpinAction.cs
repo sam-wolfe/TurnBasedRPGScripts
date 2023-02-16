@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpinAction : BaseAction {
 
     [SerializeField] private int actionPointCost = 0;
-    [SerializeField] private float _spinDuration = 1.5f;
     private Vector3 _targetPosition;
     private float totalSpin;
     

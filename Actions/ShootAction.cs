@@ -11,7 +11,6 @@ public class ShootAction : BaseAction {
         Cooloff
     }
     
-    [SerializeField] private Animator unitAnimator;
     [SerializeField] private int actionPointCost = 1;
     [SerializeField] private int _maxRange = 4;
 

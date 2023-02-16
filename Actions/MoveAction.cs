@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MoveAction : BaseAction
 {
-    [SerializeField] private Animator unitAnimator;
     [SerializeField] private int actionPointCost = 1;
     private float stoppingDistance = 0.1f;
     private Vector3 targetPosition;
