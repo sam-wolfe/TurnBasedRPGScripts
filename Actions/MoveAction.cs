@@ -12,6 +12,9 @@ public class MoveAction : BaseAction
 
     // For dev
     [SerializeField] private int maxMoveDistance = 4;
+
+    public event Action OnMoveStart;
+    public event Action OnMoveStop;
     
     protected override string _name
     {
@@ -37,11 +40,10 @@ public class MoveAction : BaseAction
 
                 transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
-                unitAnimator.SetBool("IsWalking", true);
             }
             else {
-                unitAnimator.SetBool("IsWalking", false);
                 CompleteAction();
+                OnMoveStop?.Invoke();
             }
         
             float rotateSpeed = 10f;
@@ -55,6 +57,7 @@ public class MoveAction : BaseAction
             this.targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
             InitiateAction(onActionComplete);
             onActionStarted();
+            OnMoveStart?.Invoke();
         }
     }
 
