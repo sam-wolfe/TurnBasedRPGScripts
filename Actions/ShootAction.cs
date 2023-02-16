@@ -62,7 +62,6 @@ public class ShootAction : BaseAction {
                 }
                 
                 Shoot();
-                OnShoot?.Invoke();
                 CheckNextStateTransition(State.Cooloff, _cooloffStateTime);
                 break;
             case State.Cooloff:
@@ -82,12 +81,21 @@ public class ShootAction : BaseAction {
     }
     
     private void Shoot() {
+        OnShoot?.Invoke();
         _targetUnit.Damage();
     }
 
     public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
         
+
+        
         if (IsValidActionGridPosition(targetPosition)) {
+            _targetUnit = LevelGrid.instance.GetUnitAtGridPosition(targetPosition);
+            
+            if (_targetUnit == null) {
+                throw new Exception("Valid position returned no unit! This should not happen!");
+            }
+        
             InitiateAction(onActionComplete);
             
             state = State.Aiming;
@@ -126,13 +134,7 @@ public class ShootAction : BaseAction {
                 
                 Unit targetUnit = LevelGrid.instance.GetUnitAtGridPosition(testGridPosition);
 
-                if (targetUnit != null) {
-                    _targetUnit = targetUnit;
-                } else {
-                    continue;
-                }
-
-                if (_targetUnit.IsEnemy() == _unit.IsEnemy()) {
+                if (targetUnit.IsEnemy() == _unit.IsEnemy()) {
                     // Both units are on the same team
                     continue;
                 }
