@@ -11,6 +11,10 @@ public class UnitAnimator : MonoBehaviour {
         if (TryGetComponent<MoveAction>(out MoveAction moveAction)) {
             moveAction.OnMoveStart += HandleMoveStart;
             moveAction.OnMoveStop += HandleMoveStop;
+            
+        }
+        if (TryGetComponent<ShootAction>(out ShootAction shootAction)) {
+            shootAction.OnShoot += HandleShoot;
         }
     }
     
@@ -20,6 +24,10 @@ public class UnitAnimator : MonoBehaviour {
     
     private void HandleMoveStop() {
         _animator.SetBool("IsWalking", false);
+    }
+    
+    private void HandleShoot() {
+        _animator.SetTrigger("Shoot");
     }
 
 }

@@ -25,6 +25,8 @@ public class ShootAction : BaseAction {
     private Unit _targetUnit;
     private bool _canShootBullet;
     
+    public event Action OnShoot;
+    
     protected override string _name
     {
         get { return "Shoot"; }
@@ -60,6 +62,7 @@ public class ShootAction : BaseAction {
                 }
                 
                 Shoot();
+                OnShoot?.Invoke();
                 CheckNextStateTransition(State.Cooloff, _cooloffStateTime);
                 break;
             case State.Cooloff:
