@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour {
     private MoveAction _moveAction;
     private SpinAction _spinAction;
     private BaseAction[] _baseActions;
+    private HealthSystem _healthSystem;
     [SerializeField] private int _actionPoints;
     [SerializeField] private int _maxActionPoints;
 
@@ -29,8 +30,27 @@ public class Unit : MonoBehaviour {
         _moveAction = GetComponent<MoveAction>();
         _spinAction = GetComponent<SpinAction>();
         _baseActions = GetComponents<BaseAction>();
+        _healthSystem = GetComponent<HealthSystem>();
         
         _actionPoints = _maxActionPoints;
+    }
+    
+    void Start() {
+        _gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
+        LevelGrid.instance.AddUnitAtGridPosition(_gridPosition, this);
+        
+        TurnSystem.instance.OnTurnChanged += HandleTurnChanged;
+        
+        _healthSystem.OnDeath += HandleDeath;
+    }
+
+    void Update() {
+        
+        GridPosition newGridPosition = LevelGrid.instance.GetGridPosition(transform.position);
+        if (newGridPosition != _gridPosition) {
+            LevelGrid.instance.UnitMovedGridPosition(this, _gridPosition, newGridPosition);
+            _gridPosition = newGridPosition;
+        }
     }
 
     public void Select() {
@@ -57,22 +77,6 @@ public class Unit : MonoBehaviour {
         return LevelGrid.instance.GetWorldPosition(_gridPosition);
     }
 
-    void Start() {
-        _gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
-        LevelGrid.instance.AddUnitAtGridPosition(_gridPosition, this);
-        
-        TurnSystem.instance.OnTurnChanged += HandleTurnChanged;
-    }
-
-    void Update() {
-        
-        GridPosition newGridPosition = LevelGrid.instance.GetGridPosition(transform.position);
-        if (newGridPosition != _gridPosition) {
-            LevelGrid.instance.UnitMovedGridPosition(this, _gridPosition, newGridPosition);
-            _gridPosition = newGridPosition;
-        }
-    }
-    
     public BaseAction[] GetBaseActions() {
         return _baseActions;
     }
@@ -120,8 +124,15 @@ public class Unit : MonoBehaviour {
         return _isEnemy;
     }
 
-    public void Damage() {
+    public void Damage(int damageAmount) {
         Debug.Log(transform + " was damaged!");
+        _healthSystem.Damage(damageAmount);
+    }
+    
+    private void HandleDeath(Unit unit) {
+        Debug.Log(transform + " died!");
+        LevelGrid.instance.RemoveUnitAtGridPosition(_gridPosition, this);
+        Destroy(gameObject);
     }
 
 }

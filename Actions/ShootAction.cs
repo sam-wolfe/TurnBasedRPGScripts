@@ -90,7 +90,10 @@ public class ShootAction : BaseAction {
             targetUnit = _targetUnit, 
             shooterUnit = _unit
         });
-        _targetUnit.Damage();
+        
+        // DEV: damage is hardcoded for now
+        int damage = 40;
+        _targetUnit.Damage(damage);
     }
 
     public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
