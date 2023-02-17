@@ -22,9 +22,14 @@ public class ShootAction : BaseAction {
     private State state;
     private float stateTimer;
     private Unit _targetUnit;
-    private bool _canShootBullet;
+    private bool _canShootBullet = true;
     
-    public event Action OnShoot;
+    public event EventHandler<ShootEventArgs> OnShoot;
+    
+    public class ShootEventArgs : EventArgs {
+        public Unit targetUnit;
+        public Unit shooterUnit;
+    }
     
     protected override string _name
     {
@@ -57,13 +62,14 @@ public class ShootAction : BaseAction {
                 break;
             case State.Shooting:
                 if (_canShootBullet) {
+                    _canShootBullet = false;
                     Shoot();
                 }
                 
-                Shoot();
                 CheckNextStateTransition(State.Cooloff, _cooloffStateTime);
                 break;
             case State.Cooloff:
+                _canShootBullet = true;
                 CheckNextStateTransition(State.Aiming, 0f);
                 break;
         }
@@ -80,7 +86,10 @@ public class ShootAction : BaseAction {
     }
     
     private void Shoot() {
-        OnShoot?.Invoke();
+        OnShoot?.Invoke(this, new ShootEventArgs() {
+            targetUnit = _targetUnit, 
+            shooterUnit = _unit
+        });
         _targetUnit.Damage();
     }
 

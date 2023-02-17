@@ -23,7 +23,8 @@ public class SpinAction : BaseAction {
     private void ProcessSpin() {
         float rotateSpeed = 10f;
         Vector3 spinDirection = (_targetPosition - transform.position).normalized;
-        transform.forward = Vector3.Lerp(transform.forward, spinDirection, Time.deltaTime * rotateSpeed);
+        transform.forward = Vector3.Lerp(
+            transform.forward, spinDirection, Time.deltaTime * rotateSpeed);
         
         // if transform.forward is close to spinDirection, then we can stop spinning
         float dotProduct = Vector3.Dot(transform.forward, spinDirection);

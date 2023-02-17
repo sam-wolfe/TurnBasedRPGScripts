@@ -53,6 +53,10 @@ public class Unit : MonoBehaviour {
         return _gridPosition;
     }
 
+    public Vector3 GetWorldPosition() {
+        return LevelGrid.instance.GetWorldPosition(_gridPosition);
+    }
+
     void Start() {
         _gridPosition = LevelGrid.instance.GetGridPosition(transform.position);
         LevelGrid.instance.AddUnitAtGridPosition(_gridPosition, this);

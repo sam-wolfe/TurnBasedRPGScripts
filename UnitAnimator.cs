@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class UnitAnimator : MonoBehaviour {
 
     [SerializeField] private Animator _animator;
+    [SerializeField] Transform bulletProjectilePrefab;
+    [SerializeField] Transform bulletSpawnPoint;
 
     private void Awake() {
         if (TryGetComponent<MoveAction>(out MoveAction moveAction)) {
@@ -23,8 +26,13 @@ public class UnitAnimator : MonoBehaviour {
         _animator.SetBool("IsWalking", false);
     }
     
-    private void HandleShoot() {
+    private void HandleShoot(object sender, ShootAction.ShootEventArgs e) {
         _animator.SetTrigger("Shoot");
+
+        Transform bulletTransform = Instantiate(bulletProjectilePrefab, bulletSpawnPoint.position, Quaternion.identity);
+        BulletProjectile bullet = bulletTransform.GetComponent<BulletProjectile>();
+        
+        bullet.Setup(e.targetUnit.GetWorldPosition());
     }
 
 }
