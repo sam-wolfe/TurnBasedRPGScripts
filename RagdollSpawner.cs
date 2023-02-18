@@ -27,7 +27,13 @@ public class RagdollSpawner : MonoBehaviour {
         var hrb = head.GetComponent<Rigidbody>();
         hrb.AddForce(new Vector3(0, 1, 0) * randomForce);
         
-        hrb.AddTorque(new Vector3(0, 1, 0) * randomForce);
+        
+        // Randomly make int either 1 or -1
+        int randomDirection = UnityEngine.Random.Range(0, 2) == 0 ? -1 : 1;
+
+        UnitRagdoll ragdoll = ragdollTransform.GetComponent<UnitRagdoll>();
+        
+        ragdoll.rbHips.AddTorque(new Vector3(0, randomDirection, 0) * 5000f, ForceMode.Impulse);
     }
 
 }

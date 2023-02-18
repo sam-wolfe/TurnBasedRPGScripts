@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitRagdoll : MonoBehaviour {
 
     [SerializeField] private Transform _ragdollRoot;
+    [SerializeField] public Rigidbody rbHips;
 
     public void Setup(Transform originalRoot) {
         MatchAllChildTransforms(originalRoot, _ragdollRoot);
