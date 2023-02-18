@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthSystem : MonoBehaviour {
@@ -10,7 +8,7 @@ public class HealthSystem : MonoBehaviour {
     
     public event Action OnHealthChanged;
 
-    public event Action<Unit> OnDeath; 
+    public event Action<Unit> OnDeath;
 
     private void Start() {
         _health = _maxHealth;
