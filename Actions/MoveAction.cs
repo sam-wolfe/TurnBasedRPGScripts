@@ -54,9 +54,9 @@ public class MoveAction : BaseAction
         
         if (IsValidActionGridPosition(targetPosition)) {
             this.targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
-            InitiateAction(onActionComplete);
             onActionStarted();
             OnMoveStart?.Invoke();
+            InitiateAction(onActionComplete);
         }
     }
 

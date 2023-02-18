@@ -34,12 +34,11 @@ public class SpinAction : BaseAction {
     }
 
     public override void TakeAction(Action onActionStarted, Action onActionComplete, GridPosition targetPosition) {
-        InitiateAction(onActionComplete);
-        
         _targetPosition = LevelGrid.instance.GetWorldPosition(targetPosition);
 
         // This action can't fail to run
         onActionStarted();
+        InitiateAction(onActionComplete);
     }
 
     public override int GetActionPointsCost() {

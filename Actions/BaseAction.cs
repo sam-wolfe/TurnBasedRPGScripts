@@ -10,6 +10,9 @@ public abstract class BaseAction : MonoBehaviour {
     protected Action onActionComplete;
     protected abstract string _name { get; set;}
 
+    public static event Action<BaseAction> OnAnyActionStart;
+    public static event Action<BaseAction> OnAnyActionComplete;
+
     protected virtual void Awake() {
         _unit = GetComponent<Unit>();
     }
@@ -60,11 +63,15 @@ public abstract class BaseAction : MonoBehaviour {
     protected void InitiateAction(Action onActionComplete) {
         _isActive = true;
         this.onActionComplete = onActionComplete;
+        
+        OnAnyActionStart?.Invoke(this);
     }
     
     protected void CompleteAction() {
         _isActive = false;
         onActionComplete();
+        
+        OnAnyActionComplete?.Invoke(this);
     }
 
 

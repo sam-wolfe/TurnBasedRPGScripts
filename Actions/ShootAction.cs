@@ -106,12 +106,11 @@ public class ShootAction : BaseAction {
             if (_targetUnit == null) {
                 throw new Exception("Valid position returned no unit! This should not happen!");
             }
-        
-            InitiateAction(onActionComplete);
             
             state = State.Aiming;
             stateTimer = _aimingStateTime;
             onActionStarted();
+            InitiateAction(onActionComplete);
         }
     }
     
@@ -159,6 +158,14 @@ public class ShootAction : BaseAction {
     
     public override int GetActionPointsCost() {
         return actionPointCost;
+    }
+    
+    public Unit GetTargetUnit() {
+        return _targetUnit;
+    }
+    
+    public Unit GetShooterUnit() {
+        return _unit;
     }
 
 }
