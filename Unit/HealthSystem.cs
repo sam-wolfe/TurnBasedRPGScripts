@@ -7,6 +7,8 @@ public class HealthSystem : MonoBehaviour {
 
     [SerializeField] private int _health;
     [SerializeField] private int _maxHealth = 100;
+    
+    public event Action OnHealthChanged;
 
     public event Action<Unit> OnDeath; 
 
@@ -16,6 +18,7 @@ public class HealthSystem : MonoBehaviour {
 
     public void Damage(int damageAmount) {
         _health -= damageAmount;
+        OnHealthChanged?.Invoke();
         if (_health <= 0) {
             _health = 0;
             Die();
@@ -24,5 +27,9 @@ public class HealthSystem : MonoBehaviour {
 
     private void Die() {
         OnDeath?.Invoke(GetComponent<Unit>());
+    }
+    
+    public float GetHealthPercent() {
+        return (float) _health / _maxHealth;
     }
 }
