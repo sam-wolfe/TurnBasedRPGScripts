@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class GridSystemVisual : MonoBehaviour {
     
-    public static GridSystemVisual instance { get; private set; }
-
     [SerializeField] private Transform visualPrefab;
-
+    public static GridSystemVisual instance { get; private set; }
     private GridVisualSingle[,] _gridVisualSingles;
+    
+    
 
     private void Awake() {
         if (instance != null) {
