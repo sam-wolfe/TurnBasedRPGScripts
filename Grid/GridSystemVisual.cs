@@ -11,7 +11,7 @@ public class GridSystemVisual : MonoBehaviour {
     public static GridSystemVisual instance { get; private set; }
     private GridVisualSingle[,] _gridVisualSingles;
 
-    public enum GridVisualColours {
+    public enum GridVisualColour {
         White,
         Red,
         Green,
@@ -19,11 +19,12 @@ public class GridSystemVisual : MonoBehaviour {
         Yellow,
         Orange,
         Purple,
+        RedTransparent,
     }
     
     [Serializable]
     public struct GridVisualTypeMaterial {
-        public GridVisualColours colour;
+        public GridVisualColour colour;
         public Material material;
     }
     
@@ -80,12 +81,33 @@ public class GridSystemVisual : MonoBehaviour {
 
     private void UpdateGridVisual() {
         
+        Unit selectedUnit = UnitActionSystem.instance.GetSelectedUnit;
         BaseAction selectedAction = UnitActionSystem.instance.GetSelectedAction;
         
         if (selectedAction != null) {
             var gp = selectedAction.GetValidActionGridPositions();
             HideAllGridPositions();
-            ShowGridPositionList(gp);    
+            
+            GridVisualColour colour;
+
+            switch (selectedAction) {
+                default:
+                case MoveAction moveAction:
+                    colour = GridVisualColour.White;
+                    break;
+                case SpinAction spinAction:
+                    colour = GridVisualColour.Blue;
+                    break;
+                case ShootAction shootAction:
+                    colour = GridVisualColour.Red;
+                    ShowGridPositionRange(
+                        selectedUnit.GetGridPosition(), 
+                        shootAction.GetRange(),
+                        GridVisualColour.RedTransparent
+                    );
+                    break;
+            }
+            ShowGridPositionList(gp, colour);    
         }
     }
 
@@ -95,13 +117,39 @@ public class GridSystemVisual : MonoBehaviour {
         }
     }
 
-    public void ShowGridPositionList(List<GridPosition> gridPositions) {
+    public void ShowGridPositionList(List<GridPosition> gridPositions, GridVisualColour colour) {
         foreach (var gridPosition in gridPositions) {
-            _gridVisualSingles[gridPosition.x, gridPosition.z].Show();
+            _gridVisualSingles[gridPosition.x, gridPosition.z].Show(GetMaterialFromColour(colour));
         }
     }
     
-    private Material GetMaterialFromColour(GridVisualColours colour) {
+    private void ShowGridPositionRange(GridPosition gp, int range, GridVisualColour colour) {
+        List<GridPosition> validGridPositions = new List<GridPosition>();
+
+        for (int x = -range; x <= range; x++) {
+            for (int z = -range; z <= range; z++) {
+                GridPosition gp2 = new GridPosition(x, z);
+                
+                GridPosition testGridPosition = gp + gp2;
+                int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+                
+                if (testDistance > range) {
+                    // Test if new position is outside of max range
+                    continue;
+                }
+                
+                if (!LevelGrid.instance.IsValidGridPosition(testGridPosition)) {
+                    // Test if new position is outside of grid
+                    continue;
+                }
+                
+                validGridPositions.Add(testGridPosition);
+            }
+        }
+        ShowGridPositionList(validGridPositions, colour);
+    }
+    
+    private Material GetMaterialFromColour(GridVisualColour colour) {
         foreach (var gridVisualTypeMaterial in gridVisualTypeMaterials) {
             if (gridVisualTypeMaterial.colour == colour) {
                 return gridVisualTypeMaterial.material;

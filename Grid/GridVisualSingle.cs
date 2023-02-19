@@ -18,8 +18,9 @@ public class GridVisualSingle : MonoBehaviour {
         
     }
 
-    public void Show() {
+    public void Show(Material material) {
         visualMesh.enabled = true;
+        visualMesh.material = material;
     }
 
     public void Hide() {

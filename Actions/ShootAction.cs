@@ -167,5 +167,9 @@ public class ShootAction : BaseAction {
     public Unit GetShooterUnit() {
         return _unit;
     }
+    
+    public int GetRange() {
+        return _maxRange;
+    }
 
 }
