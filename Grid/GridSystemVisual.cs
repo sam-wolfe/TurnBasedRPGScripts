@@ -6,8 +6,26 @@ using UnityEngine;
 public class GridSystemVisual : MonoBehaviour {
     
     [SerializeField] private Transform visualPrefab;
+    [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterials;
+    
     public static GridSystemVisual instance { get; private set; }
     private GridVisualSingle[,] _gridVisualSingles;
+
+    public enum GridVisualColours {
+        White,
+        Red,
+        Green,
+        Blue,
+        Yellow,
+        Orange,
+        Purple,
+    }
+    
+    [Serializable]
+    public struct GridVisualTypeMaterial {
+        public GridVisualColours colour;
+        public Material material;
+    }
     
     
 
@@ -81,5 +99,16 @@ public class GridSystemVisual : MonoBehaviour {
         foreach (var gridPosition in gridPositions) {
             _gridVisualSingles[gridPosition.x, gridPosition.z].Show();
         }
+    }
+    
+    private Material GetMaterialFromColour(GridVisualColours colour) {
+        foreach (var gridVisualTypeMaterial in gridVisualTypeMaterials) {
+            if (gridVisualTypeMaterial.colour == colour) {
+                return gridVisualTypeMaterial.material;
+            }
+        }
+        
+        throw new Exception("No material found for colour: " + colour);
+        return null;
     }
 }
