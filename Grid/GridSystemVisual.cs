@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid;
 using UnityEngine;
@@ -34,10 +35,29 @@ public class GridSystemVisual : MonoBehaviour {
             }
         }
         HideAllGridPositions();
+        UpdateGridVisual();
+    }
+
+    private void OnEnable() {
+        UnitActionSystem.instance.OnSelectedActionChanged += HandleSelectedActionChanged;
+        LevelGrid.instance.OnUnitMovePosition += HandleUnitMovePosition;
+    }
+    
+    private void OnDisable() {
+        UnitActionSystem.instance.OnSelectedActionChanged -= HandleSelectedActionChanged;
+        LevelGrid.instance.OnUnitMovePosition -= HandleUnitMovePosition;
+    }
+    
+    private void HandleSelectedActionChanged() {
+        UpdateGridVisual();
+    }
+    
+    private void HandleUnitMovePosition(Unit unit) {
+        UpdateGridVisual();
     }
 
     private void Update() {
-        UpdateGridVisual();
+        // UpdateGridVisual();
     }
 
     private void UpdateGridVisual() {

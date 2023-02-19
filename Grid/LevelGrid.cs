@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class LevelGrid : MonoBehaviour {
     
     [SerializeField] private Transform _gridObjectPrefab;
     private GridSystem _gridSystem;
+
+    public event Action<Unit> OnUnitMovePosition;
 
     private void Awake() {
         if (instance != null) {
@@ -42,6 +45,7 @@ public class LevelGrid : MonoBehaviour {
     public void UnitMovedGridPosition(Unit unit, GridPosition from, GridPosition to) {
         RemoveUnitAtGridPosition(from, unit);
         AddUnitAtGridPosition(to, unit);
+        OnUnitMovePosition?.Invoke(unit);
     }
 
     public bool IsOccupied(GridPosition gridPosition) {
