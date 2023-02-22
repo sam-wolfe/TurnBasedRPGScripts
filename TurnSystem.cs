@@ -19,7 +19,6 @@ public class TurnSystem : MonoBehaviour {
         }
         instance = this;
     }
-    
 
     public void NextTurn() {
         turnNumber++;
