@@ -85,7 +85,6 @@ public abstract class BaseAction : MonoBehaviour {
         foreach (GridPosition gridPosition in validGridPositions) {
             EnemyAIAction enemyAIAction = GetEnemyAIAction(gridPosition);
             enemyAIActions.Add(enemyAIAction);
-            Debug.Log("Looping");
         }
         
         enemyAIActions.Sort((a, b) => b.actionValue - a.actionValue);
