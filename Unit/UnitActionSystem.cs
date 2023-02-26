@@ -13,8 +13,6 @@ public class UnitActionSystem : MonoBehaviour {
 
     [SerializeField]
     private Unit _selectedUnit;
-    // TODO learn to implement this
-    // public Unit SelectedUnit => selectedUnit;
     
     [SerializeField] 
     private LayerMask unitLayerMask;
