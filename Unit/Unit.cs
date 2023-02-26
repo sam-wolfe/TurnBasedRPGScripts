@@ -23,8 +23,10 @@ public class Unit : MonoBehaviour {
 
     public event Action OnUnitSelected;
     public event Action OnUnitDeSelected;
-    
     public static event Action OnAnyActionPointsChanged;
+    public static event Action<Unit> AnyUnitSpawned;
+    public static event Action<Unit> AnyUnitDead;
+    
 
     private void Awake() {
         _moveAction = GetComponent<MoveAction>();
@@ -42,6 +44,8 @@ public class Unit : MonoBehaviour {
         TurnSystem.instance.OnTurnChanged += HandleTurnChanged;
         
         _healthSystem.OnDeath += HandleDeath;
+        
+        AnyUnitSpawned?.Invoke(this);
     }
 
     void Update() {
@@ -136,6 +140,7 @@ public class Unit : MonoBehaviour {
         Debug.Log(transform + " died!");
         LevelGrid.instance.RemoveUnitAtGridPosition(_gridPosition, this);
         Destroy(gameObject);
+        AnyUnitDead?.Invoke(this);
     }
 
 }
