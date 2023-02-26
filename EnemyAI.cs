@@ -37,8 +37,8 @@ public class EnemyAI : MonoBehaviour {
             case State.TakingTurn:
                 timer -= Time.deltaTime;
                 if (timer <= 0) {
-                    _state = State.WaitingForTurn;
-                    TurnSystem.instance.NextTurn();
+                    _state = State.Busy;
+                    TakeAction(SetStateTakingTurn);
                 }
                 break;
             case State.Busy:
@@ -47,8 +47,11 @@ public class EnemyAI : MonoBehaviour {
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
 
-
+    private void SetStateTakingTurn() {
+        timer = 0.5f;
+        _state = State.TakingTurn;
     }
 
     private void HandleTurnChange() {
@@ -56,5 +59,9 @@ public class EnemyAI : MonoBehaviour {
             _state = State.TakingTurn;
             timer = 3;
         }
+    }
+
+    private void TakeAction(Action onEnemyActionComplete) {
+        
     }
 }
