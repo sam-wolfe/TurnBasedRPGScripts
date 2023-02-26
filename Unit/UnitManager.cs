@@ -43,5 +43,17 @@ public class UnitManager : MonoBehaviour {
             _friendlyUnits.Remove(unit);
         }
     }
+    
+    public List<Unit> GetUnits() {
+        return _units;
+    }
+    
+    public List<Unit> GetFriendlyUnits() {
+        return _friendlyUnits;
+    }
+    
+    public List<Unit> GetEnemyUnits() {
+        return _enemyUnits;
+    }
 
 }
