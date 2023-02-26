@@ -74,5 +74,30 @@ public abstract class BaseAction : MonoBehaviour {
         OnAnyActionComplete?.Invoke(this);
     }
 
+    public EnemyAIAction GetBestEnemyAIAction() {
+        // Method name is a bit misleading, method actually looks for the best
+        // target position and returns an EnemyAIAction with that position
+        
+        List<EnemyAIAction> enemyAIActions = new List<EnemyAIAction>();
+        
+        List<GridPosition> validGridPositions = GetValidActionGridPositions();
+
+        foreach (GridPosition gridPosition in validGridPositions) {
+            EnemyAIAction enemyAIAction = GetEnemyAIAction(gridPosition);
+            enemyAIActions.Add(enemyAIAction);
+            Debug.Log("Looping");
+        }
+        
+        enemyAIActions.Sort((a, b) => b.actionValue - a.actionValue);
+        
+        
+        if (enemyAIActions.Count != 0) {
+            return enemyAIActions[0];
+        } else {
+            return null;
+        }
+    }
+    
+    public abstract EnemyAIAction GetEnemyAIAction(GridPosition gridPosition);
 
 }

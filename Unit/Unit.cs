@@ -8,6 +8,7 @@ public class Unit : MonoBehaviour {
     private GridPosition _gridPosition;
     private MoveAction _moveAction;
     private SpinAction _spinAction;
+    private ShootAction _shootAction;
     private BaseAction[] _baseActions;
     private HealthSystem _healthSystem;
     [SerializeField] private int _actionPoints;
@@ -31,6 +32,7 @@ public class Unit : MonoBehaviour {
     private void Awake() {
         _moveAction = GetComponent<MoveAction>();
         _spinAction = GetComponent<SpinAction>();
+        _shootAction = GetComponent<ShootAction>();
         _baseActions = GetComponents<BaseAction>();
         _healthSystem = GetComponent<HealthSystem>();
         
@@ -74,6 +76,10 @@ public class Unit : MonoBehaviour {
     
     public SpinAction GetSpinAction() {
         return _spinAction;
+    }
+
+    public ShootAction GetShootAction() {
+        return _shootAction;
     }
 
     public GridPosition GetGridPosition() {

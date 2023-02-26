@@ -95,21 +95,43 @@ public class EnemyAI : MonoBehaviour {
     
     private bool TryEnemyTakeAction(Unit unit, Action onEnemyActionComplete) {
 
-        SpinAction spinAction = unit.GetSpinAction();
+        EnemyAIAction bestAction = null;
+        BaseAction bestBaseAction = null;
         
-        GridPosition mouseGridPosition = unit.GetGridPositionDev();
-        
-        _currentAction = spinAction;
-        _currentUnit = unit;
+        foreach (BaseAction possibleAction in unit.GetBaseActions()) {
+            if (!unit.HasActionPointsForAction(possibleAction)) {
+                // Cant afford this action, skip it
+                continue;
+            }
+            
+            if (bestAction == null) {
+                // First iteration, set best action
+                bestAction = possibleAction.GetBestEnemyAIAction();
+                bestBaseAction = possibleAction;
+                continue;
+            }
 
-        // Check if unit has enough AP to perform action
-        if (unit.HasActionPointsForAction(spinAction)) {
-            spinAction.TakeAction(OnTakingAction, onEnemyActionComplete, mouseGridPosition);
-            Debug.Log("Spin action taken!");
+            EnemyAIAction tempAction = possibleAction.GetBestEnemyAIAction();
+            if (tempAction != null && tempAction.actionValue > bestAction.actionValue) {
+                bestAction = tempAction;
+                bestBaseAction = possibleAction;
+            }
+        }
+
+        if (bestAction != null && unit.HasActionPointsForAction(bestBaseAction)) {
+
+            _currentAction = bestBaseAction;
+            _currentUnit = unit;
+            
+            Debug.Log("Action taken!");
+            bestBaseAction.TakeAction(OnTakingAction, onEnemyActionComplete, bestAction.gridPosition);
             return true;
+            
         } else {
-            Debug.Log("Not enough points, no action taken.");
+            
+            Debug.Log("Not enough points or no valid target position for actions, no action taken.");
             return false;
+            
         }
 
     }

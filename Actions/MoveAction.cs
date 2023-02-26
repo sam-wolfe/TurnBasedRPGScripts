@@ -90,4 +90,15 @@ public class MoveAction : BaseAction
     public override int GetActionPointsCost() {
         return actionPointCost;
     }
+    
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition) {
+
+        int targetCount = _unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+        
+        return new EnemyAIAction {
+            gridPosition = gridPosition,
+            actionValue = 10 * targetCount,
+        };
+    }
+    
 }

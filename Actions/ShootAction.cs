@@ -113,10 +113,14 @@ public class ShootAction : BaseAction {
             InitiateAction(onActionComplete);
         }
     }
-    
+
     public override List<GridPosition> GetValidActionGridPositions() {
-        List<GridPosition> validGridPositions = new List<GridPosition>();
         GridPosition unitGridPosition = _unit.GetGridPosition();
+        return GetValidActionGridPositions(unitGridPosition);
+    }
+
+    public List<GridPosition> GetValidActionGridPositions(GridPosition unitGridPosition) {
+        List<GridPosition> validGridPositions = new List<GridPosition>();
 
         for (int x = -_maxRange; x <= _maxRange; x++) {
             for (int z = -_maxRange; z <= _maxRange; z++) {
@@ -171,5 +175,15 @@ public class ShootAction : BaseAction {
     public int GetRange() {
         return _maxRange;
     }
+    
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition) {
+        return new EnemyAIAction {
+            gridPosition = gridPosition,
+            actionValue = 100,
+        };
+    }
 
+    public int GetTargetCountAtPosition(GridPosition gridPosition) {
+        return GetValidActionGridPositions(gridPosition).Count;
+    }
 }
