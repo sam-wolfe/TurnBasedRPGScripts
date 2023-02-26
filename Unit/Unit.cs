@@ -79,6 +79,11 @@ public class Unit : MonoBehaviour {
     public GridPosition GetGridPosition() {
         return _gridPosition;
     }
+    public GridPosition GetGridPositionDev() {
+        var fakeGrid = _gridPosition;
+        fakeGrid.x += 1;
+        return fakeGrid;
+    }
 
     public Vector3 GetWorldPosition() {
         return LevelGrid.instance.GetWorldPosition(_gridPosition);

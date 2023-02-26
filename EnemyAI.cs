@@ -1,4 +1,5 @@
 using System;
+using Grid;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour {
@@ -11,6 +12,9 @@ public class EnemyAI : MonoBehaviour {
     private State _state;
     
     public float timer;
+
+    private BaseAction _currentAction;
+    private Unit _currentUnit;
 
     private void Awake() {
         _state = State.WaitingForTurn;
@@ -37,8 +41,10 @@ public class EnemyAI : MonoBehaviour {
             case State.TakingTurn:
                 timer -= Time.deltaTime;
                 if (timer <= 0) {
-                    _state = State.Busy;
-                    TakeAction(SetStateTakingTurn);
+                    if (!TryTakeAction(SetStateTakingTurn)) {
+                        // No more actions to take, end turn
+                        TurnSystem.instance.NextTurn();
+                    }
                 }
                 break;
             case State.Busy:
@@ -46,6 +52,21 @@ public class EnemyAI : MonoBehaviour {
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
+        }
+    }
+    
+    private void SetBusy() {
+        _state = State.Busy;
+    }
+
+    private void OnTakingAction() {
+        SetBusy();
+        
+        bool pointsWereSpent = _currentUnit.TrySpendActionPoints(_currentAction);
+        
+        if (!pointsWereSpent) {
+            throw new Exception("Unit tried to spend action points but failed! \n" +
+                                "This should never happen, check the logic.");
         }
     }
 
@@ -61,7 +82,35 @@ public class EnemyAI : MonoBehaviour {
         }
     }
 
-    private void TakeAction(Action onEnemyActionComplete) {
+    private bool TryTakeAction(Action onEnemyActionComplete) {
+        Debug.Log("Taking enemy action!");
+        foreach (Unit unit in UnitManager.instance.GetEnemyUnits()) {
+            if(TryEnemyTakeAction(unit, onEnemyActionComplete)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    private bool TryEnemyTakeAction(Unit unit, Action onEnemyActionComplete) {
+
+        SpinAction spinAction = unit.GetSpinAction();
         
+        GridPosition mouseGridPosition = unit.GetGridPositionDev();
+        
+        _currentAction = spinAction;
+        _currentUnit = unit;
+
+        // Check if unit has enough AP to perform action
+        if (unit.HasActionPointsForAction(spinAction)) {
+            spinAction.TakeAction(OnTakingAction, onEnemyActionComplete, mouseGridPosition);
+            Debug.Log("Spin action taken!");
+            return true;
+        } else {
+            Debug.Log("Not enough points, no action taken.");
+            return false;
+        }
+
     }
 }

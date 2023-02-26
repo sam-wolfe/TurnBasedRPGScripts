@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitManager : MonoBehaviour {
+    
+    public static UnitManager instance { get; private set; }
 
     private List<Unit> _units = new List<Unit>();
     private List<Unit> _friendlyUnits = new List<Unit>();
@@ -17,6 +19,13 @@ public class UnitManager : MonoBehaviour {
         _units = new List<Unit>();
         _friendlyUnits = new List<Unit>();
         _enemyUnits = new List<Unit>();
+        
+        if (instance != null) {
+            Debug.LogError("You added an extra UnitManager ya dingus: " + transform + " - " + instance);
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
     }
 
     private void OnDisable() {
