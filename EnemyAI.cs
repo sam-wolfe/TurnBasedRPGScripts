@@ -125,12 +125,10 @@ public class EnemyAI : MonoBehaviour {
             bestBaseAction.TakeAction(OnTakingAction, onEnemyActionComplete, bestAction.gridPosition);
             return true;
             
-        } else {
-            
-            Debug.Log("Not enough points or no valid target position for actions, no action taken.");
-            return false;
-            
         }
+
+        Debug.Log("Not enough points or no valid target position for actions, no action taken.");
+        return false;
 
     }
 }
