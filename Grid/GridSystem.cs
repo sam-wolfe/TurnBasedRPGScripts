@@ -1,26 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using Grid;
+using System;
 using UnityEngine;
 
-public class GridSystem {
+public class GridSystem<TGridCell> {
 
     public int width {  get; private set; }
     public int height {  get; private set; }
     private float cellSize;
-    private GridCell[,] gridCellArray;
+    private TGridCell[,] gridCellArray;
     
-    public GridSystem(int width, int height, float cellSize) {
+    public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridCell>, GridPosition, TGridCell> createGridCell) {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
 
-        gridCellArray = new GridCell[width, height];
+        gridCellArray = new TGridCell[width, height];
 
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < height; z++) {
                 GridPosition gridPosition = new GridPosition(x, z);
-                gridCellArray[x, z] = new GridCell(this, gridPosition);
+                gridCellArray[x, z] = createGridCell(this, gridPosition);
                 // Debug.DrawLine(GetWorldPosition(x, z), GetWorldPosition(x, z) + Vector3.right * .2f, Color.white, 1000 );
             }
         }
@@ -52,12 +53,12 @@ public class GridSystem {
                 debugGridIndex.parent = gridParent.transform;
                 GridIndexVisual gVis = 
                     debugGridIndex.GetComponent<GridIndexVisual>();
-                gVis.SetGridCell(GetGridCell(gridPosition));
+                gVis.SetGridCell(GetGridCell(gridPosition) as GridCell);
             }
         }
     }
 
-    public GridCell GetGridCell(GridPosition gridPosition) {
+    public TGridCell GetGridCell(GridPosition gridPosition) {
         return gridCellArray[gridPosition.x, gridPosition.z];
     }
 

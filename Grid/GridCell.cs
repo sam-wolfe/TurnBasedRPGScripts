@@ -4,12 +4,12 @@ using Grid;
 
 public class GridCell {
 
-    private GridSystem _gridSystem;
+    private GridSystem<GridCell> _gridSystem;
     private GridPosition _gridPosition;
     public List<Unit> _unitList { get; private set; }
 
 
-    public GridCell(GridSystem gridSystem, GridPosition gridPosition) {
+    public GridCell(GridSystem<GridCell> gridSystem, GridPosition gridPosition) {
         _gridPosition = gridPosition;
         _gridSystem = gridSystem;
         _unitList = new List<Unit>();
