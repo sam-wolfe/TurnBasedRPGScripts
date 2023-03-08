@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Grid;
 using System;
 using UnityEngine;
