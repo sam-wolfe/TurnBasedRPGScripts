@@ -104,7 +104,7 @@ public class UnitActionSystem : MonoBehaviour {
         unit.Select();
         
         _selectedUnit = unit;
-        SetSelectedAction(unit.GetMoveAction());
+        SetSelectedAction(unit.GetAction<MoveAction>());
         
         // Added this back in later to communicate to classes that arent
         // children of Unit.

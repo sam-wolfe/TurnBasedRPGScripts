@@ -11,7 +11,7 @@ public class TestGrid : MonoBehaviour {
     private void Update() {
         // Debug.Log(_gridSystem.GetGridPosition(MouseWorld.GetPosition()));
         if (Input.GetKeyDown(KeyCode.T)) {
-            var gp = unit.GetMoveAction().GetValidActionGridPositions();
+            var gp = unit.GetAction<MoveAction>().GetValidActionGridPositions();
             // _gridSystemVisual.ShowGridPositionList(gp);
         }
         if (Input.GetKeyDown(KeyCode.Y)) {

@@ -6,9 +6,6 @@ public class Unit : MonoBehaviour {
 
     
     private GridPosition _gridPosition;
-    private MoveAction _moveAction;
-    private SpinAction _spinAction;
-    private ShootAction _shootAction;
     private BaseAction[] _baseActions;
     private HealthSystem _healthSystem;
     [SerializeField] private int _actionPoints;
@@ -30,9 +27,6 @@ public class Unit : MonoBehaviour {
     
 
     private void Awake() {
-        _moveAction = GetComponent<MoveAction>();
-        _spinAction = GetComponent<SpinAction>();
-        _shootAction = GetComponent<ShootAction>();
         _baseActions = GetComponents<BaseAction>();
         _healthSystem = GetComponent<HealthSystem>();
         
@@ -69,17 +63,15 @@ public class Unit : MonoBehaviour {
     public void DeSelect() {
         OnUnitDeSelected?.Invoke();
     }
-
-    public MoveAction GetMoveAction() {
-        return _moveAction;
-    }
     
-    public SpinAction GetSpinAction() {
-        return _spinAction;
-    }
+    public T GetAction<T>() where T : BaseAction {
+        foreach (var action in _baseActions) {
+            if (action is T) {
+                return (T) action;
+            }
+        }
 
-    public ShootAction GetShootAction() {
-        return _shootAction;
+        return null;
     }
 
     public GridPosition GetGridPosition() {
