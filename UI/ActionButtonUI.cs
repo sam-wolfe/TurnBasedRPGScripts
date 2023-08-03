@@ -25,8 +25,8 @@ public class ActionButtonUI : MonoBehaviour {
         });
     }
     
-    public void SetSelectedVisual(bool selected) {
-        _selectedVisual.SetActive(selected);
+    public void SetSelectedVisual() {
+        _selectedVisual.SetActive(action == UnitActionSystem.instance.GetSelectedAction);
     }
     
     public void SetDisabled(bool disabled) {

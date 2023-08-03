@@ -45,7 +45,7 @@ public class UnitActionSystemUI : MonoBehaviour {
             ActionButtonUI button = buttonTransform.GetComponent<ActionButtonUI>();
             button.SetBaseAction(action);
             _actionButtons.Add(button);
-            button.SetSelectedVisual(action == UnitActionSystem.instance.GetSelectedAction);
+            button.SetSelectedVisual();
         }
     }
     
@@ -58,7 +58,7 @@ public class UnitActionSystemUI : MonoBehaviour {
 
     private void HandleSelectedActionChanged() {
         foreach (ActionButtonUI button in _actionButtons) {
-            button.SetSelectedVisual(button.action == UnitActionSystem.instance.GetSelectedAction);
+            button.SetSelectedVisual();
         }
     }
 
@@ -67,7 +67,7 @@ public class UnitActionSystemUI : MonoBehaviour {
             button.SetDisabled(busy);
             if (!busy) {
                 // Re-select the action if it was selected before
-                button.SetSelectedVisual(button.action == UnitActionSystem.instance.GetSelectedAction);
+                button.SetSelectedVisual();
             } else {
                 // An action was performed, update the UI
                 UpdateActionPoints();
